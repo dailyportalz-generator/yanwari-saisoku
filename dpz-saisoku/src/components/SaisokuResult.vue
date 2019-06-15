@@ -29,6 +29,15 @@
       </div>
       <img src="@/assets/waku_down.gif" alt>
     </div>
+    <template v-if="step >= 6">
+      <p class="saisoku-result_build">
+        <button type="button" @click="handleClickRestart">もう一度つくる</button>
+      </p>
+      <p class="saisoku-result_share">
+        <input type="text" class="saisoku-result_shareurl" readonly :value="shareUrl">
+        <a target="_blank" :href="twitterUrl">つぶやく</a>
+      </p>
+    </template>
   </div>
 </template>
 
@@ -86,6 +95,23 @@ export default {
           "頑張れ、とエールを送っておこう。"
         ]
       ];
+    },
+    shareUrl() {
+      const shareData = {
+        ...this.questions.target,
+        ...this.questions,
+        target: null,
+        share: 1
+      }
+      delete shareData.target
+      return `https://dailyportalz.jp/kiji/yanwari-saisoku?${stringify(
+        shareData
+      )}`
+    },
+    twitterUrl() {
+      return `https://twitter.com/intent/tweet?text=やんわり催促メールジェネレーター&url=${encodeURIComponent(
+        this.shareUrl
+      )}`
     }
   },
   methods: {
